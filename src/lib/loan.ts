@@ -102,9 +102,9 @@ export const STEPS: Step[] = [
     field: "loanType",
     label: "Loan type",
     question:
-      "Welcome to LoanBot 🤖! I'm here to help you apply for a loan. What type of loan are you interested in?",
+      "Welcome to TrustBot! I'm here to help you apply for a loan. What type of loan are you interested in?",
     kind: "options",
-    options: ["🚗 Car Loan", "🏠 House Loan", "💼 Personal Loan", "🎓 Education Loan"],
+    options: ["Car Loan", "House Loan", "Personal Loan", "Education Loan"],
   },
   {
     step: 2,
