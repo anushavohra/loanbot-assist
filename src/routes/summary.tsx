@@ -1,10 +1,12 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { CheckCircle2, ClipboardList, Pencil } from "lucide-react";
+import { Calculator, CheckCircle2, ClipboardList, Pencil } from "lucide-react";
 import {
   calculateEligibility,
   emptyApplication,
   generateSummary,
+  calculateRepayment,
+  formatMoney,
   storage,
   type LoanApplication,
 } from "@/lib/loan";
@@ -51,6 +53,7 @@ function SummaryPage() {
   }, []);
 
   const rows = generateSummary(application);
+  const estimate = calculateRepayment(application);
   const approved = application.eligibility.approved;
 
   /** submitApplication(): persist the final application locally. */
@@ -136,6 +139,48 @@ function SummaryPage() {
             </li>
           ))}
         </ul>
+
+        {estimate && (
+          <section
+            aria-labelledby="estimate-heading"
+            className="mt-6 rounded-xl border border-border bg-card p-4 shadow-bank"
+          >
+            <div className="flex items-center gap-2">
+              <Calculator aria-hidden="true" className="size-5 text-primary" />
+              <h2 id="estimate-heading" className="font-semibold">
+                Repayment estimate
+              </h2>
+            </div>
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              <div className="rounded-lg bg-secondary p-4">
+                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                  Estimated monthly payment
+                </p>
+                <p className="mt-1 text-2xl font-bold text-primary">
+                  {formatMoney(estimate.monthlyPayment)}
+                </p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {estimate.months} payments at {(estimate.apr * 100).toFixed(2)}% APR
+                </p>
+              </div>
+              <div className="rounded-lg bg-secondary p-4">
+                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                  Total repayment
+                </p>
+                <p className="mt-1 text-2xl font-bold text-card-foreground">
+                  {formatMoney(estimate.totalRepayment)}
+                </p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Includes {formatMoney(estimate.totalInterest)} in interest
+                </p>
+              </div>
+            </div>
+            <p className="mt-3 text-xs text-muted-foreground">
+              Estimates only, based on the published {application.loanType} rate. Your final rate is
+              confirmed after review.
+            </p>
+          </section>
+        )}
 
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
           <Button className="min-h-11 flex-1" onClick={submitApplication} disabled={submitted}>

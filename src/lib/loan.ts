@@ -203,6 +203,46 @@ export function calculateEligibility(app: LoanApplication): LoanApplication["eli
   };
 }
 
+/** Annual interest rate (as a decimal) for the selected loan type. */
+export function aprFor(loanType: string): number {
+  const rules = LOAN_TYPES.find((l) => l.name === loanType);
+  if (!rules) return 0;
+  return parseFloat(rules.apr) / 100;
+}
+
+export interface RepaymentEstimate {
+  apr: number;
+  monthlyPayment: number;
+  totalRepayment: number;
+  totalInterest: number;
+  months: number;
+}
+
+/**
+ * Standard amortized loan payment: P * r / (1 - (1 + r)^-n).
+ * Returns null when the inputs are incomplete.
+ */
+export function calculateRepayment(app: LoanApplication): RepaymentEstimate | null {
+  const apr = aprFor(app.loanType);
+  const months = Math.round(app.repaymentYears * 12);
+  if (!app.loanAmount || !months || !apr) return null;
+
+  const r = apr / 12;
+  const monthlyPayment = (app.loanAmount * r) / (1 - Math.pow(1 + r, -months));
+  const totalRepayment = monthlyPayment * months;
+  return {
+    apr,
+    months,
+    monthlyPayment,
+    totalRepayment,
+    totalInterest: totalRepayment - app.loanAmount,
+  };
+}
+
+export function formatMoney(v: number): string {
+  return `$${v.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
 export interface SummaryRow {
   step: number;
   label: string;
