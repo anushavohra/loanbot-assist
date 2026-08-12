@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { RotateCcw, Send } from "lucide-react";
+import { Icon } from "@/components/Icon";
 import {
   getStep,
   TOTAL_STEPS,
@@ -17,16 +17,16 @@ import { Input } from "@/components/ui/input";
 export const Route = createFileRoute("/chat")({
   head: () => ({
     meta: [
-      { title: "Loan Application Chat — LoanBank" },
+      { title: "Loan Application Chat — TrustBank Finance" },
       {
         name: "description",
         content:
-          "Chat with LoanBot to complete your LoanBank application in 10 guided steps and get an instant decision.",
+          "Chat with TrustBot to complete your TrustBank Finance application in 10 guided steps and get an instant decision.",
       },
-      { property: "og:title", content: "Loan Application Chat — LoanBank" },
+      { property: "og:title", content: "Loan Application Chat — TrustBank Finance" },
       {
         property: "og:description",
-        content: "Answer 10 quick questions and LoanBot checks your loan eligibility instantly.",
+        content: "Answer 10 quick questions and TrustBot checks your loan eligibility instantly.",
       },
     ],
   }),
@@ -142,29 +142,32 @@ function ChatPage() {
   return (
     <div className="flex h-dvh flex-col bg-background">
       <header className="border-b border-border bg-card">
-        <div className="mx-auto grid max-w-3xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3">
+        <div className="mx-auto grid max-w-[720px] grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3">
           <div className="flex min-w-0 items-center gap-2">
-            <span aria-hidden="true" className="shrink-0 text-xl">
-              🏦
-            </span>
+            <Icon name="account_balance" className="shrink-0 text-xl text-primary" filled />
             <div className="min-w-0">
-              <p className="truncate text-sm font-bold">LoanBank</p>
-              <h1 className="truncate text-xs text-muted-foreground">Loan Application</h1>
+              <p className="truncate text-sm font-bold">TrustBank Finance</p>
+              <h1 className="truncate text-xs text-muted-foreground">
+                Loan Application — Step {step} of {TOTAL_STEPS}
+              </h1>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-muted-foreground">
-              Step {step}/{TOTAL_STEPS}
-            </span>
             <Button
-              variant="outline"
+              variant="ghost"
               size="sm"
               onClick={resetChat}
               aria-label="Start the application over"
-              className="min-h-11"
+              className="min-h-11 rounded-full"
             >
-              <RotateCcw aria-hidden="true" />
+              <Icon name="restart_alt" className="text-lg" />
               <span className="hidden sm:inline">Start Over</span>
+            </Button>
+            <Button asChild variant="outline" size="sm" className="min-h-11 rounded-full">
+              <Link to="/">
+                <Icon name="close" className="text-lg" />
+                <span className="hidden sm:inline">Save &amp; Exit</span>
+              </Link>
             </Button>
           </div>
         </div>
@@ -181,9 +184,12 @@ function ChatPage() {
             style={{ width: `${percent}%` }}
           />
         </div>
-        <p className="mx-auto max-w-3xl px-4 py-1 text-right text-[11px] text-muted-foreground">
-          {percent}% complete
-        </p>
+        <div className="mx-auto flex max-w-[720px] items-center justify-between px-4 py-1.5 text-[11px] font-medium text-muted-foreground">
+          <span>Loan Application</span>
+          <span>
+            Step {step} of {TOTAL_STEPS} · {percent}% complete
+          </span>
+        </div>
       </header>
 
       <div
@@ -194,7 +200,7 @@ function ChatPage() {
         aria-live="polite"
         aria-label="Chat conversation"
       >
-        <div className="mx-auto flex max-w-3xl flex-col gap-3">
+        <div className="mx-auto flex max-w-[720px] flex-col gap-3">
           {messages.map((m) => (
             <div
               key={m.id}
@@ -211,12 +217,12 @@ function ChatPage() {
           ))}
 
           {typing && (
-            <div className="flex justify-start" aria-label="LoanBot is typing">
+            <div className="flex justify-start" aria-label="TrustBot is typing">
               <span className="bubble-bot flex items-center gap-1 px-4 py-3">
                 {[0, 1, 2].map((i) => (
                   <span
                     key={i}
-                    className="dot-bounce size-2 rounded-full bg-primary"
+                    className="dot-bounce size-1.5 rounded-full bg-muted-foreground"
                     style={{ animationDelay: `${i * 0.15}s` }}
                   />
                 ))}
@@ -234,7 +240,7 @@ function ChatPage() {
                   onClick={() =>
                     isFinal ? navigate({ to: "/summary" }) : submitAnswer(option)
                   }
-                  className="min-h-11 rounded-full border border-primary bg-card px-4 py-2 text-sm font-medium text-primary transition-all hover:scale-105 hover:bg-primary hover:text-primary-foreground"
+                  className="min-h-11 rounded-full border border-primary bg-card px-4 py-2 text-sm font-medium text-primary shadow-bank transition-all hover:-translate-y-0.5 hover:bg-primary hover:text-primary-foreground"
                 >
                   {option}
                 </button>
@@ -246,7 +252,7 @@ function ChatPage() {
 
       <div className="border-t border-border bg-card px-4 py-3">
         <form
-          className="mx-auto flex max-w-3xl items-start gap-2"
+          className="mx-auto flex max-w-[720px] items-start gap-2"
           onSubmit={(e) => {
             e.preventDefault();
             if (!input.trim() || current.kind === "options") return;
@@ -269,7 +275,7 @@ function ChatPage() {
               }
               aria-invalid={Boolean(error)}
               aria-describedby={error ? "chatInputError" : undefined}
-              className="min-h-11"
+              className="min-h-11 rounded-full"
             />
             {error && (
               <p id="chatInputError" role="alert" className="mt-1 text-xs font-medium text-destructive">
@@ -281,12 +287,13 @@ function ChatPage() {
             type="submit"
             disabled={current.kind === "options" || !input.trim()}
             aria-label="Send message"
-            className="min-h-11 min-w-11"
+            className="min-h-11 rounded-full"
           >
-            <Send aria-hidden="true" />
+            <span className="hidden sm:inline">Send</span>
+            <Icon name="send" className="text-lg" />
           </Button>
         </form>
-        <p className="mx-auto mt-2 max-w-3xl text-center text-xs text-muted-foreground">
+        <p className="mx-auto mt-2 max-w-[720px] text-center text-xs text-muted-foreground">
           <Link to="/" className="underline hover:text-primary">
             Back to home
           </Link>
