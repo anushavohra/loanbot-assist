@@ -38,10 +38,46 @@ export const emptyApplication: LoanApplication = {
 };
 
 export const LOAN_TYPES = [
-  { emoji: "🚗", name: "Car Loan", term: "Up to 5 years", apr: "7% APR", minIncome: 30000, minScore: 650 },
-  { emoji: "🏠", name: "House Loan", term: "Up to 30 years", apr: "4.5% APR", minIncome: 50000, minScore: 700 },
-  { emoji: "💼", name: "Personal Loan", term: "Up to 3 years", apr: "10% APR", minIncome: 25000, minScore: 600 },
-  { emoji: "🎓", name: "Education Loan", term: "Up to 10 years", apr: "6% APR", minIncome: 0, minScore: 600 },
+  {
+    emoji: "🚗",
+    icon: "directions_car",
+    name: "Car Loan",
+    term: "Up to 5 years",
+    apr: "7% APR",
+    minIncome: 30000,
+    minScore: 650,
+    features: ["Quick approval", "Flexible terms"],
+  },
+  {
+    emoji: "🏠",
+    icon: "home",
+    name: "House Loan",
+    term: "Up to 30 years",
+    apr: "4.5% APR",
+    minIncome: 50000,
+    minScore: 700,
+    features: ["Low rates", "Fixed or variable"],
+  },
+  {
+    emoji: "💼",
+    icon: "work",
+    name: "Personal Loan",
+    term: "Up to 3 years",
+    apr: "10% APR",
+    minIncome: 25000,
+    minScore: 600,
+    features: ["No collateral", "Quick funding"],
+  },
+  {
+    emoji: "🎓",
+    icon: "school",
+    name: "Education Loan",
+    term: "Up to 10 years",
+    apr: "6% APR",
+    minIncome: 0,
+    minScore: 600,
+    features: ["Flexible repayment", "Interest subsidy"],
+  },
 ] as const;
 
 export type StepField = keyof Omit<LoanApplication, "eligibility">;
@@ -66,9 +102,9 @@ export const STEPS: Step[] = [
     field: "loanType",
     label: "Loan type",
     question:
-      "Welcome to LoanBot 🤖! I'm here to help you apply for a loan. What type of loan are you interested in?",
+      "Welcome to TrustBot! I'm here to help you apply for a loan. What type of loan are you interested in?",
     kind: "options",
-    options: ["🚗 Car Loan", "🏠 House Loan", "💼 Personal Loan", "🎓 Education Loan"],
+    options: ["Car Loan", "House Loan", "Personal Loan", "Education Loan"],
   },
   {
     step: 2,

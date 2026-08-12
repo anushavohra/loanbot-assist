@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Calculator, CheckCircle2, ClipboardList, Pencil } from "lucide-react";
+import { Icon } from "@/components/Icon";
 import {
   calculateEligibility,
   emptyApplication,
@@ -23,13 +23,13 @@ import {
 export const Route = createFileRoute("/summary")({
   head: () => ({
     meta: [
-      { title: "Application Summary — LoanBank" },
+      { title: "Application Summary — TrustBank Finance" },
       {
         name: "description",
         content:
-          "Review your LoanBank loan application answers, see your pre-approval decision and submit for final review.",
+          "Review your TrustBank Finance loan application answers, see your pre-approval decision and submit for final review.",
       },
-      { property: "og:title", content: "Application Summary — LoanBank" },
+      { property: "og:title", content: "Application Summary — TrustBank Finance" },
       {
         property: "og:description",
         content: "Check your answers and pre-approval result before submitting your loan application.",
@@ -75,21 +75,37 @@ function SummaryPage() {
   }
 
   return (
-    <div className="min-h-dvh bg-secondary animate-fade-in">
+    <div className="min-h-dvh bg-background">
       <header className="border-b border-border bg-card">
-        <div className="mx-auto flex max-w-3xl items-center gap-2 px-4 py-4">
-          <span aria-hidden="true" className="text-xl">
-            🏦
-          </span>
-          <Link to="/" className="truncate font-bold">
-            LoanBank
+        <div className="mx-auto grid max-w-[720px] grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-4">
+          <Link to="/" className="flex min-w-0 items-center gap-2">
+            <Icon name="account_balance" className="shrink-0 text-xl text-primary" filled />
+            <span className="truncate font-bold">TrustBank Finance</span>
           </Link>
+          <Button asChild variant="ghost" size="sm" className="min-h-11 rounded-full">
+            <Link to="/">
+              <Icon name="close" className="text-lg" />
+              <span className="hidden sm:inline">Save &amp; Exit</span>
+            </Link>
+          </Button>
         </div>
       </header>
 
-      <main className="mx-auto max-w-3xl px-4 py-8">
-        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Application Summary</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
+      <main className="mx-auto max-w-[720px] px-4 py-8">
+        <p
+          className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-semibold ${
+            approved
+              ? "bg-accent text-accent-foreground"
+              : "bg-warning/15 text-warning-foreground"
+          }`}
+        >
+          <Icon name={approved ? "check_circle" : "info"} className="text-lg" filled />
+          {approved ? "Pre-Approval Successful" : "Additional Review Needed"}
+        </p>
+        <h1 className="mt-4 text-[32px] font-bold leading-tight tracking-tight">
+          Application Summary
+        </h1>
+        <p className="mt-2 text-sm text-on-surface-variant">
           Review your answers below. Use the edit buttons to change any response.
         </p>
 
@@ -101,13 +117,13 @@ function SummaryPage() {
           }`}
           role="status"
         >
-          {approved ? (
-            <CheckCircle2 aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-success" />
-          ) : (
-            <ClipboardList aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-warning" />
-          )}
+          <Icon
+            name={approved ? "check_circle" : "info"}
+            className={`mt-0.5 shrink-0 text-xl ${approved ? "text-success" : "text-warning"}`}
+            filled
+          />
           <div className="min-w-0">
-            <h2 className="font-semibold">{approved ? "✅ Pre-Approved" : "📋 Review Needed"}</h2>
+            <h2 className="font-semibold">{approved ? "Pre-Approved" : "Review Needed"}</h2>
             <p className="mt-1 text-sm text-foreground">
               {application.eligibility.message || "Complete the chat to see your decision."}
             </p>
@@ -129,11 +145,11 @@ function SummaryPage() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="min-h-11 text-primary"
+                className="min-h-11 rounded-full text-primary"
                 onClick={() => editStep(row.step)}
                 aria-label={`Edit ${row.label}`}
               >
-                <Pencil aria-hidden="true" />
+                <Icon name="edit" className="text-base" />
                 Edit
               </Button>
             </li>
@@ -146,7 +162,7 @@ function SummaryPage() {
             className="mt-6 rounded-xl border border-border bg-card p-4 shadow-bank"
           >
             <div className="flex items-center gap-2">
-              <Calculator aria-hidden="true" className="size-5 text-primary" />
+              <Icon name="calculate" className="text-xl text-primary" />
               <h2 id="estimate-heading" className="font-semibold">
                 Repayment estimate
               </h2>
@@ -183,10 +199,18 @@ function SummaryPage() {
         )}
 
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-          <Button className="min-h-11 flex-1" onClick={submitApplication} disabled={submitted}>
-            {submitted ? "Application Submitted" : "Submit Application"}
+          <Button asChild variant="outline" className="min-h-11 rounded-full sm:min-w-32">
+            <Link to="/chat">Back</Link>
           </Button>
-          <Button variant="outline" className="min-h-11 flex-1" onClick={startNew}>
+          <Button
+            className="min-h-11 flex-1 rounded-full font-semibold"
+            onClick={submitApplication}
+            disabled={submitted}
+          >
+            {submitted ? "Application Submitted" : "Submit Application"}
+            <Icon name="arrow_forward" className="text-lg" />
+          </Button>
+          <Button variant="ghost" className="min-h-11 rounded-full" onClick={startNew}>
             Start New Application
           </Button>
         </div>
@@ -195,7 +219,7 @@ function SummaryPage() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Application received 🎉</DialogTitle>
+            <DialogTitle>Application received</DialogTitle>
             <DialogDescription>
               Thanks {application.fullName || "there"} — we've saved your {application.loanType || "loan"}{" "}
               application. A confirmation was sent to {application.email || "your email"} and a loan
