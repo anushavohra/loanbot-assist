@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { CheckCircle2, ClipboardList, Pencil } from "lucide-react";
+import { Calculator, CheckCircle2, ClipboardList, Pencil } from "lucide-react";
 import {
   calculateEligibility,
   emptyApplication,
