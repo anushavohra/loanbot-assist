@@ -34,7 +34,7 @@ export const Route = createFileRoute("/summary")({
       },
     ],
   }),
-  component: SummaryPage;
+  component: SummaryPage,
 });
 
 function SummaryPage() {
