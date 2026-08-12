@@ -74,7 +74,8 @@ function ChatPage() {
   useEffect(() => {
     if (!ready || step < TOTAL_STEPS) return;
     const t = window.setTimeout(() => {
-      void navigate({ to: "/summary" });
+      console.log("navigating to summary");
+      void navigate({ to: "/summary" }).catch((e) => console.error("nav failed", e));
     }, 2200);
     return () => window.clearTimeout(t);
   }, [ready, step, navigate]);
