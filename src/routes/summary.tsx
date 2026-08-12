@@ -53,6 +53,7 @@ function SummaryPage() {
   }, []);
 
   const rows = generateSummary(application);
+  const estimate = calculateRepayment(application);
   const approved = application.eligibility.approved;
 
   /** submitApplication(): persist the final application locally. */
