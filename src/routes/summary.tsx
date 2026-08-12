@@ -5,6 +5,8 @@ import {
   calculateEligibility,
   emptyApplication,
   generateSummary,
+  calculateRepayment,
+  formatMoney,
   storage,
   type LoanApplication,
 } from "@/lib/loan";
