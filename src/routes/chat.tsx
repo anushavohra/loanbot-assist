@@ -70,6 +70,15 @@ function ChatPage() {
     storage.saveApplication(application);
   }, [ready, messages, step, application]);
 
+  /** Once the final step is reached, hand off to the summary page. */
+  useEffect(() => {
+    if (!ready || step < TOTAL_STEPS) return;
+    const t = window.setTimeout(() => {
+      void navigate({ to: "/summary" });
+    }, 2200);
+    return () => window.clearTimeout(t);
+  }, [ready, step, navigate]);
+
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, typing]);
@@ -112,11 +121,8 @@ function ChatPage() {
       const nextStep = Math.min(step + 1, TOTAL_STEPS);
       setStep(nextStep);
       addBotMessage(getStep(nextStep).question);
-      if (nextStep === TOTAL_STEPS) {
-        window.setTimeout(() => navigate({ to: "/summary" }), 2200);
-      }
     },
-    [addBotMessage, addUserMessage, application, current, navigate, step],
+    [addBotMessage, addUserMessage, application, current, step],
   );
 
   /** resetChat() */
