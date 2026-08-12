@@ -155,6 +155,12 @@ export const STEPS: Step[] = [
 
 export const TOTAL_STEPS = 10;
 
+/** Safe step accessor (1-indexed). */
+export function getStep(step: number): Step {
+  const clamped = Math.min(Math.max(step, 1), TOTAL_STEPS);
+  return STEPS[clamped - 1] as Step;
+}
+
 /** Strips leading emoji from quick reply labels ("🚗 Car Loan" -> "Car Loan"). */
 export function cleanValue(v: string): string {
   return v.replace(/^[^\p{L}\d$]+/u, "").trim();

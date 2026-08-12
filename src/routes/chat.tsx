@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { RotateCcw, Send } from "lucide-react";
 import {
-  STEPS,
+  getStep,
   TOTAL_STEPS,
   cleanValue,
   calculateEligibility,
@@ -47,7 +47,7 @@ function ChatPage() {
   const [ready, setReady] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const current = STEPS[step - 1];
+  const current = getStep(step);
 
   /** startChat(): restore any saved session, otherwise greet the user. */
   useEffect(() => {
@@ -57,7 +57,7 @@ function ChatPage() {
       setMessages(saved);
       setStep(storage.loadStep());
     } else {
-      setMessages([{ id: nextId(), role: "bot", text: STEPS[0].question }]);
+      setMessages([{ id: nextId(), role: "bot", text: getStep(1).question }]);
       setStep(1);
     }
     setReady(true);
@@ -111,13 +111,13 @@ function ChatPage() {
 
       const nextStep = step + 1;
       if (nextStep > TOTAL_STEPS) {
-        addBotMessage(STEPS[TOTAL_STEPS - 1].question);
+        addBotMessage(getStep(TOTAL_STEPS).question);
         setStep(TOTAL_STEPS);
         window.setTimeout(() => navigate({ to: "/summary" }), 1400);
         return;
       }
       setStep(nextStep);
-      addBotMessage(STEPS[nextStep - 1].question);
+      addBotMessage(getStep(nextStep).question);
     },
     [addBotMessage, addUserMessage, application, current, navigate, step],
   );
@@ -126,7 +126,7 @@ function ChatPage() {
   const resetChat = useCallback(() => {
     storage.reset();
     setApplication(emptyApplication);
-    setMessages([{ id: nextId(), role: "bot", text: STEPS[0].question }]);
+    setMessages([{ id: nextId(), role: "bot", text: getStep(1).question }]);
     setStep(1);
     setInput("");
     setError(null);
