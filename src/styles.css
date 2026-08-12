@@ -63,6 +63,7 @@
   --color-success-foreground: var(--success-foreground);
   --color-warning: var(--warning);
   --color-warning-foreground: var(--warning-foreground);
+  --color-on-surface-variant: var(--on-surface-variant);
   --color-bot-bubble: var(--bot-bubble);
   --color-bot-bubble-foreground: var(--bot-bubble-foreground);
   --font-sans: "Work Sans", "Segoe UI", system-ui, sans-serif;
@@ -78,6 +79,7 @@
   --success-foreground: oklch(1 0 0);
   --warning: oklch(0.7686 0.1647 70.08);
   --warning-foreground: oklch(0.2854 0.0094 88.76);
+  --on-surface-variant: oklch(0.3979 0.0102 91.61); /* #494741 */
   --bot-bubble: oklch(0.9215 0.0138 92.99); /* #e8e5db */
   --bot-bubble-foreground: oklch(0.2854 0.0094 88.76);
   --card: oklch(1 0 0);
@@ -168,6 +170,7 @@
   --success-foreground: oklch(0.129 0.042 264.695);
   --warning: oklch(0.8 0.16 70.08);
   --warning-foreground: oklch(0.129 0.042 264.695);
+  --on-surface-variant: oklch(0.85 0.01 90);
   --bot-bubble: oklch(0.279 0.041 260.031);
   --bot-bubble-foreground: oklch(0.984 0.003 247.858);
 }
