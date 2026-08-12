@@ -109,15 +109,12 @@ function ChatPage() {
       nextApp.eligibility = calculateEligibility(nextApp);
       setApplication(nextApp);
 
-      const nextStep = step + 1;
-      if (nextStep > TOTAL_STEPS) {
-        addBotMessage(getStep(TOTAL_STEPS).question);
-        setStep(TOTAL_STEPS);
-        window.setTimeout(() => navigate({ to: "/summary" }), 1400);
-        return;
-      }
+      const nextStep = Math.min(step + 1, TOTAL_STEPS);
       setStep(nextStep);
       addBotMessage(getStep(nextStep).question);
+      if (nextStep === TOTAL_STEPS) {
+        window.setTimeout(() => navigate({ to: "/summary" }), 2200);
+      }
     },
     [addBotMessage, addUserMessage, application, current, navigate, step],
   );
